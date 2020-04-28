@@ -1,61 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package services;
 
-import database.Database;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import dao.UserDaoImpl;
+import entities.User;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import models.User;
 
-/**
- *
- * @author Walter
- */
 public class UserImpl implements IUser {
+    /* Fields */
+    UserDaoImpl userDao;
+    
+    /* Constructor */
+    public UserImpl(){
+        userDao = new UserDaoImpl();
+    }
+
+    /* Methods */
     @Override
-    public int save(User user, Database db) {
-        String query = String.format("INSERT INTO `users`(`first_name`, `last_name`, `tel`, `email`) "
-                                   + "VALUES('%s', '%s', '%s', '%s')", user.getFirstName(), user.getLastName(), user.getTel(), user.getEmail());        
-        try {
-            db.setStatement();
-            Statement st = db.getStatement();
-            int records = st.executeUpdate(query);
-            st.close();
-            db.closeConnection();
-            System.out.println(records + " records updated");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserImpl.class.getName()).log(Level.SEVERE, null, ex);
+    public User findById(int id) {
+        if (id <= 0) {
+            return null;
+        } else {
+            return userDao.findById(id);
         }
-        return 0;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
     }
 
     @Override
     public boolean updateById(int id, User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (id <= 0 || user == null) {
+            return false;
+        } else {
+            return userDao.updateById(id, user);
+        }
+    }
+
+    @Override
+    public boolean save(User user) {
+        if (user == null){
+            return false;
+        }
+        else {
+            return userDao.save(user);
+        }
     }
 
     @Override
     public boolean deleteById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (id <= 0) {
+            return false;
+        } else {
+            return userDao.deleteById(id);
+        }
     }
-
-    @Override
-    public List<User> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public User findById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

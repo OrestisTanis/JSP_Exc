@@ -12,7 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <%=  (models.User)session.getAttribute("user") %>
+        <h1>CRUD with JPA</h1>
     </body>
 </html>
