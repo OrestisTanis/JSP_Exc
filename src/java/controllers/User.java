@@ -5,20 +5,24 @@
  */
 package controllers;
 
+import database.Database;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import services.UserImpl;
 
 /**
  *
  * @author Walter
  */
 public class User extends HttpServlet {
-
+    private Database db = new Database();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,7 +62,14 @@ public class User extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession s = request.getSession();
+        // Creating user object
+        models.User user = new models.User("AAA","BBB","025646893","aaa@bbb.com");
         s.setAttribute("user", new models.User("AAA","BBB","025646893","aaa@bbb.com"));
+        
+        // Creating user service object
+        UserImpl userService = new UserImpl();
+        // Save user obj to db
+        userService.save(user, db);
     }
 
     /**
